@@ -60,7 +60,7 @@ RUN pyenv install 2.7.18 && \
     pyenv install 3.9.10 && \
     pyenv install 3.10.2 && \
     pyenv install 3.11.0a4 && \
-    wait && 
+    wait
 
 RUN \
     PYENV_VERSION=2.7.18 pip install ptipython poetry pre-commit & \
