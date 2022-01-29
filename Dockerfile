@@ -21,7 +21,6 @@ RUN apt install -y \
     mc \
     mlocate \
     nim \
-    python3-pip \
     libreadline-dev \
     sqlite3 \
     tmux \
