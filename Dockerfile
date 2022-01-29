@@ -38,6 +38,8 @@ RUN apt install -y \
     libsqlite3-dev \
     libffi-dev
 
+ENV DOTNET_CLI_TELEMETRY_OPTOUT 1
+
 RUN wget https://packages.microsoft.com/config/debian/11/packages-microsoft-prod.deb -O packages-microsoft-prod.deb \
     && dpkg -i packages-microsoft-prod.deb \
     && rm packages-microsoft-prod.deb \
