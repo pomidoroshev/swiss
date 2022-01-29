@@ -54,24 +54,13 @@ RUN curl https://pyenv.run | bash
 ENV HOME /home/swiss
 ENV PYENV_ROOT $HOME/.pyenv
 ENV PATH $PYENV_ROOT/shims:$PYENV_ROOT/bin:$PATH
-# adjust
-ENV MAKEOPTS '-j1'
 
-RUN mkdir $PYENV_ROOT/cache
-WORKDIR $PYENV_ROOT/cache
-RUN wget https://www.python.org/ftp/python/2.7.18/Python-2.7.18.tar.xz & \
-    wget https://www.python.org/ftp/python/3.8.12/Python-3.8.12.tar.xz & \
-    wget https://www.python.org/ftp/python/3.9.10/Python-3.9.10.tar.xz & \
-    wget https://www.python.org/ftp/python/3.10.2/Python-3.10.2.tar.xz & \
-    wget https://www.python.org/ftp/python/3.11.0a4/Python-3.11.0a4.tar.xz & \
-    wait && \
-    pyenv install 2.7.18 & \
-    pyenv install 3.8.12 & \
-    pyenv install 3.9.10 & \
-    pyenv install 3.10.2 & \
-    pyenv install 3.11.0a4 & \
-    wait && \
-    rm *.tar.xz
+RUN pyenv install 2.7.18 && \
+    pyenv install 3.8.12 && \
+    pyenv install 3.9.10 && \
+    pyenv install 3.10.2 && \
+    pyenv install 3.11.0a4 && \
+    wait && 
 
 RUN \
     PYENV_VERSION=2.7.18 pip install ptipython poetry pre-commit & \
