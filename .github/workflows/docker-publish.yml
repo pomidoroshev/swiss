@@ -4,9 +4,6 @@ on:
   push:
   pull_request:
 
-env:
-  IMAGE_NAME: swiss
-
 jobs:
   # Push image to GitHub Packages.
   # See also https://docs.docker.com/docker-hub/builds/
@@ -43,7 +40,7 @@ jobs:
         with:
           context: .
           push: true
-          tags: ghcr.io/${{ github.repository_owner }}/{{ env.IMAGE_NAME }}:latest
+          tags: ghcr.io/${{ github.repository_owner }}/swiss:latest
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache-new
 
