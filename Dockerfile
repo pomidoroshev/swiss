@@ -89,13 +89,13 @@ EOF
 # TODO: java
 #  > No compatible versions available (java [0-9])
 #  > java  is already installed
+# php
 COPY <<EOF plugins
 golang
 python
 nodejs
 rust
 kotlin
-php
 ruby
 nim
 zig
