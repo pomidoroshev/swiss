@@ -1,102 +1,111 @@
+# syntax=docker/dockerfile:1.3-labs
 # TODO: nvm
 
 FROM ubuntu:20.04
 
-RUN apt-get update && apt-get upgrade -y
-
 ENV TZ Europe/Moscow
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
-RUN apt-get install -y \
-    apt-transport-https \
-    bash-completion \
-    brotli \
-    chrony \
-    curl \
-    ffmpeg \
-    g++ \
-    gcc \
-    git \
-    gnupg2 \
-    htop \
-    jq \
-    make \
-    mc \
-    mlocate \
-    nim \
-    libreadline-dev \
-    sqlite3 \
-    tmux \
-    tree \
-    vim \
-    wget \
-    zlib1g \
-    zlib1g-dev \
-    bzip2 \
-    libbz2-dev \
-    openssl \
-    libssl-dev \
-    mlocate \
-    sudo \
-    libsqlite3-dev \
-    libffi-dev \
-    software-properties-common \
-    gawk \
-    autoconf \
-    automake \
-    bison \
-    libgdbm-dev \
-    libncurses5-dev \
-    libtool \
-    libyaml-dev \
-    pkg-config \
-    libgmp-dev
+COPY <<EOF packages
+apt-transport-https
+bash-completion
+brotli
+chrony
+curl
+ffmpeg
+g++
+gcc
+git
+gnupg2
+htop
+jq
+make
+mc
+mlocate
+libreadline-dev
+sqlite3
+tmux
+tree
+vim
+wget
+zlib1g
+zlib1g-dev
+bzip2
+libbz2-dev
+openssl
+libssl-dev
+mlocate
+sudo
+libsqlite3-dev
+libffi-dev
+software-properties-common
+gawk
+autoconf
+automake
+bison
+libgdbm-dev
+libncurses5-dev
+libtool
+libyaml-dev
+pkg-config
+libgmp-dev
+re2c
+libxml2-dev
+libcurl4-openssl-dev
+libc-dev
+dpkg
+dpkg-dev
+libgd-dev
+EOF
 
-ENV DOTNET_CLI_TELEMETRY_OPTOUT 1
+RUN rm -f /etc/apt/apt.conf.d/docker-clean; echo 'Binary::apt::APT::Keep-Downloaded-Packages "true";' > /etc/apt/apt.conf.d/keep-cache
+RUN --mount=type=cache,target=/var/cache/apt --mount=type=cache,target=/var/lib/apt <<EOF
+apt-get update
+apt-get upgrade -y
+apt-get install -y $(cat packages)
+EOF
 
-RUN wget https://packages.microsoft.com/config/debian/11/packages-microsoft-prod.deb -O packages-microsoft-prod.deb \
-    && dpkg -i packages-microsoft-prod.deb \
-    && rm packages-microsoft-prod.deb \
-    && apt-get update \
-    && apt-get install -y dotnet-sdk-6.0
+RUN apt-get update && apt-get install -y libonig-dev libpq-dev libzip-dev
 
-# Go stable
-RUN wget https://go.dev/dl/go1.17.6.linux-amd64.tar.gz \
-    && tar -C /usr/local -xzf go1.17.6.linux-amd64.tar.gz \
-    && rm go1.17.6.linux-amd64.tar.gz
+ARG UNAME=swiss
+ARG UID=1000
+ARG GID=1000
+RUN groupadd -g $GID $UNAME
+RUN useradd -m -u $UID -g $GID $UNAME && echo "swiss:swiss" | chpasswd && adduser $UNAME sudo
 
-RUN useradd -m swiss && echo "swiss:swiss" | chpasswd && adduser swiss sudo
+WORKDIR /home/$UNAME
+USER $UNAME
 
-WORKDIR /home/swiss
-USER swiss
+ENV HOME /home/$UNAME
+ENV PATH $PATH:$HOME/.asdf/shims:$HOME/.asdf/bin
 
-RUN curl https://pyenv.run | bash
+RUN <<EOF
+git clone --depth 1 https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.9.0
+echo '. $HOME/.asdf/asdf.sh' >> $HOME/.bashrc
+echo '. $HOME/.asdf/asdf.sh' >> $HOME/.profile
+echo 'legacy_version_file = yes' >> $HOME/.asdfrc
+EOF
 
-ENV HOME /home/swiss
-ENV PYENV_ROOT $HOME/.pyenv
-ENV PATH $PYENV_ROOT/shims:$PYENV_ROOT/bin:/usr/local/go/bin:$HOME/go/bin:$PATH
+# TODO: java
+#  > No compatible versions available (java [0-9])
+#  > java  is already installed
+COPY <<EOF plugins
+golang
+python
+nodejs
+rust
+kotlin
+php
+ruby
+nim
+zig
+EOF
 
-RUN pyenv install 2.7.18 && \
-    pyenv install 3.8.12 && \
-    pyenv install 3.9.10 && \
-    pyenv install 3.10.2 && \
-    pyenv install 3.11.0a4 && \
-    wait
+RUN --mount=type=cache,target=$HOME/.asdf/plugins,uid=$UID,gid=$GID --mount=type=cache,target=$HOME/.asdf/installs,uid=$UID,gid=$GID <<EOF
+while read plugin; do
+    asdf plugin add $plugin
+    asdf install $plugin latest &
+done <plugins
 
-RUN \
-    PYENV_VERSION=2.7.18 pip install ptipython poetry pre-commit & \
-    PYENV_VERSION=3.8.12 pip install ptipython poetry pre-commit & \
-    PYENV_VERSION=3.9.10 pip install ptipython poetry pre-commit & \
-    PYENV_VERSION=3.10.2 pip install ptipython poetry pre-commit & \
-    PYENV_VERSION=3.11.0a4 pip install ptipython poetry pre-commit & \
-    wait
-
-RUN pyenv global 3.10.2
-
-# rvm
-RUN gpg --keyserver hkp://keyserver.ubuntu.com --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 7D2BAF1CF37B13E2069D6956105BD0E739499BDB \
-    && curl -sSL https://get.rvm.io | bash -s stable --ruby \
-    && source .bash_profile
-
-# Go beta
-RUN go install golang.org/dl/go1.18beta1@latest && go1.18beta1 download
+wait
+EOF
