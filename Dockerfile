@@ -1,14 +1,13 @@
 # TODO: nvm
-# TODO: Check Ruby version
 
 FROM ubuntu:20.04
 
-RUN apt update && apt upgrade -y
+RUN apt-get update && apt-get upgrade -y
 
 ENV TZ Europe/Moscow
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
-RUN apt install -y \
+RUN apt-get install -y \
     apt-transport-https \
     bash-completion \
     brotli \
@@ -58,8 +57,8 @@ ENV DOTNET_CLI_TELEMETRY_OPTOUT 1
 RUN wget https://packages.microsoft.com/config/debian/11/packages-microsoft-prod.deb -O packages-microsoft-prod.deb \
     && dpkg -i packages-microsoft-prod.deb \
     && rm packages-microsoft-prod.deb \
-    && apt update \
-    && apt install -y dotnet-sdk-6.0
+    && apt-get update \
+    && apt-get install -y dotnet-sdk-6.0
 
 # Go stable
 RUN wget https://go.dev/dl/go1.17.6.linux-amd64.tar.gz \
