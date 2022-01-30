@@ -42,7 +42,8 @@ RUN apt install -y \
     libsqlite3-dev \
     libffi-dev \
     software-properties-common \
-    gawk \ autoconf \
+    gawk \
+    autoconf \
     automake \
     bison \
     libgdbm-dev \
