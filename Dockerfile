@@ -86,6 +86,13 @@ echo '. $HOME/.asdf/asdf.sh' >> $HOME/.profile
 echo 'legacy_version_file = yes' >> $HOME/.asdfrc
 EOF
 
+COPY <<EOF $HOME/.default-python-packages
+poetry
+ptipython
+requests
+pre-commit
+EOF
+
 # TODO: java
 #  > No compatible versions available (java [0-9])
 #  > java  is already installed
