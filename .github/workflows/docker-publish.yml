@@ -38,15 +38,12 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-single-buildx
 
-      - name: Build image
-        run: docker build . --file Dockerfile --tag $IMAGE_NAME --cache-from type=local,src=/tmp/.buildx-cache --cache-to type=local,dest=/tmp/.buildx-cache-new
-
       - name: Build and push
         uses: docker/build-push-action@v2
         with:
           context: .
           push: true
-          tag: ghcr.io/${{ github.repository_owner }}/$IMAGE_NAME
+          tags: ghcr.io/${{ github.repository_owner }}/$IMAGE_NAME
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache-new
 
