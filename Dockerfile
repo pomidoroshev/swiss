@@ -1,7 +1,5 @@
-# TODO:
-# apt install -y rbenv
-# rbenv install 2.4.1
-# 
+# TODO: nvm
+# TODO: Check Ruby version
 
 FROM ubuntu:20.04
 
