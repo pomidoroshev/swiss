@@ -1,3 +1,8 @@
+# TODO:
+# apt install -y rbenv
+# rbenv install 2.4.1
+# 
+
 FROM ubuntu:20.04
 
 RUN apt update && apt upgrade -y
@@ -36,7 +41,8 @@ RUN apt install -y \
     mlocate \
     sudo \
     libsqlite3-dev \
-    libffi-dev
+    libffi-dev \
+    rbenv
 
 ENV DOTNET_CLI_TELEMETRY_OPTOUT 1
 
@@ -74,4 +80,4 @@ RUN \
 
 RUN pyenv global 3.10.2
 
-
+RUN rbenv install 2.4.1
