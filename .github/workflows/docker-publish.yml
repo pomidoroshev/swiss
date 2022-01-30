@@ -46,6 +46,7 @@ jobs:
         with:
           context: .
           push: true
+          tag: ghcr.io/${{ github.repository_owner }}/$IMAGE_NAME
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache-new
 
