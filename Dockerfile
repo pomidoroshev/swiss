@@ -1,5 +1,4 @@
 # syntax=docker/dockerfile:1.3-labs
-# TODO: nvm
 
 FROM ubuntu:20.04
 
@@ -56,6 +55,9 @@ libc-dev
 dpkg
 dpkg-dev
 libgd-dev
+libonig-dev
+libpq-dev
+libzip-dev
 EOF
 
 RUN rm -f /etc/apt/apt.conf.d/docker-clean; echo 'Binary::apt::APT::Keep-Downloaded-Packages "true";' > /etc/apt/apt.conf.d/keep-cache
@@ -64,8 +66,6 @@ apt-get update
 apt-get upgrade -y
 apt-get install -y $(cat packages)
 EOF
-
-RUN apt-get update && apt-get install -y libonig-dev libpq-dev libzip-dev
 
 ARG UNAME=swiss
 ARG UID=1000
