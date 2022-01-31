@@ -109,6 +109,8 @@ nim
 zig
 EOF
 
+ENV RUST_WITHOUT rust-docs,rust-other-component
+
 RUN mkdir $HOME/asdf_tmp
 
 RUN --mount=type=cache,target=$HOME/.asdf/plugins,uid=$UID,gid=$GID --mount=type=cache,target=$HOME/.asdf/installs,uid=$UID,gid=$GID <<EOF
