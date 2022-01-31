@@ -2,6 +2,8 @@
 
 FROM ubuntu:20.04
 
+SHELL ["/bin/bash", "-c"]
+
 ENV TZ Europe/Moscow
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
@@ -71,7 +73,7 @@ ARG UNAME=swiss
 ARG UID=1000
 ARG GID=1000
 RUN groupadd -g $GID $UNAME
-RUN useradd -m -u $UID -g $GID $UNAME && echo "swiss:swiss" | chpasswd && adduser $UNAME sudo
+RUN useradd -m -u $UID -g $GID -s /bin/bash $UNAME && echo "swiss:swiss" | chpasswd && adduser $UNAME sudo
 
 WORKDIR /home/$UNAME
 USER $UNAME
@@ -94,39 +96,64 @@ pre-commit
 mypy
 EOF
 
-COPY <<EOF plugins
-golang
-python
-nodejs
-rust
-kotlin
-ruby
-nim
-zig
-php
-EOF
-
 ENV RUST_WITHOUT rust-docs,rust-other-component
 
 RUN <<EOF
-set -ex
-while read plugin; do
-    asdf plugin add $plugin
-    asdf install $plugin latest &
-done <plugins
+plugins=(
+    golang
+    python
+    nodejs
+    rust
+    kotlin
+    ruby
+    nim
+    zig
+    php
+)
+
+global_versions=(
+    "php latest"
+    "ruby latest"
+    "python latest"
+    "golang latest"
+    "java openjdk-17.0.2"
+    "nodejs latest"
+    "rust latest"
+    "kotlin latest"
+    "nim latest"
+    "zig latest"
+)
+
+extra_versions=(
+    "golang 1.18beta2"
+    "python pypy3.8-7.3.7"
+    "python 3.7.12"
+    "python 3.8.12"
+    "python 3.9.10"
+    "python 3.11.0a4"
+)
+
+for plugin in "${plugins[@]}"
+do
+    asdf plugin add $plugin &
+done
 wait
 
-while read plugin; do
-    asdf global $plugin latest
-done <plugins
+for ver in "${global_versions[@]}"
+do
+    asdf install $ver &
+done
+wait
+
+for ver in "${global_versions[@]}"
+do
+    asdf global $ver
+done
+
+for ver in "${extra_versions[@]}"
+do
+    asdf install $ver
+done
 
 asdf reshim
 EOF
-
-RUN <<EOF
-asdf plugin add java
-asdf install java $(asdf latest java openjdk)
-asdf global java $(asdf latest java openjdk)
-asdf reshim
-EOF
-
