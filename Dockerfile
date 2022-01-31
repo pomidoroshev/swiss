@@ -99,6 +99,7 @@ EOF
 ENV RUST_WITHOUT rust-docs,rust-other-component
 
 RUN <<EOF
+set -ex
 plugins=(
     golang
     python
@@ -109,6 +110,7 @@ plugins=(
     nim
     zig
     php
+    java
 )
 
 global_versions=(
@@ -135,9 +137,8 @@ extra_versions=(
 
 for plugin in "${plugins[@]}"
 do
-    asdf plugin add $plugin &
+    asdf plugin add $plugin
 done
-wait
 
 for ver in "${global_versions[@]}"
 do
