@@ -91,6 +91,7 @@ poetry
 ptipython
 requests
 pre-commit
+mypy
 EOF
 
 # TODO: java
