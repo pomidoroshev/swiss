@@ -125,8 +125,8 @@ EOF
 
 RUN <<EOF
 asdf plugin add java
-asdf install java (asdf latest java openjdk)
-asdf global java (asdf latest java openjdk)
+asdf install java $(asdf latest java openjdk)
+asdf global java $(asdf latest java openjdk)
 asdf reshim
 EOF
 
