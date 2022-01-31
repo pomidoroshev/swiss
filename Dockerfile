@@ -158,3 +158,9 @@ done
 
 asdf reshim
 EOF
+
+RUN <<EOF
+asdf plugin add dotnet-core
+asdf install dotnet-core latest
+asdf global dotnet-core latest
+EOF
