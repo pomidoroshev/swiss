@@ -94,9 +94,6 @@ pre-commit
 mypy
 EOF
 
-# TODO: java
-#  > No compatible versions available (java [0-9])
-#  > java  is already installed
 COPY <<EOF plugins
 golang
 python
@@ -125,3 +122,11 @@ done <plugins
 
 asdf reshim
 EOF
+
+RUN <<EOF
+asdf plugin add java
+asdf install java (asdf latest java openjdk)
+asdf global java (asdf latest java openjdk)
+asdf reshim
+EOF
+
