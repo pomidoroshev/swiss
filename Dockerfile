@@ -108,11 +108,20 @@ nim
 zig
 EOF
 
-RUN <<EOF
-while read plugin; do
-    asdf plugin add $plugin
-    asdf install $plugin latest &
-done <plugins
+RUN mkdir $HOME/asdf_tmp
 
+RUN --mount=type=cache,target=$HOME/.asdf/plugins,uid=$UID,gid=$GID --mount=type=cache,target=$HOME/.asdf/installs,uid=$UID,gid=$GID <<EOF
+set -ex
+while read plugin; do
+    (
+        asdf plugin add $plugin
+        asdf install $plugin latest
+        asdf global $plugin latest
+    ) &
+done <plugins
 wait
+cp -R $HOME/.asdf/plugins $HOME/.asdf/installs $HOME/asdf_tmp
+asdf reshim
 EOF
+
+RUN mv $HOME/asdf_tmp/plugins $HOME/asdf_tmp/installs $HOME/.asdf && rm -r $HOME/asdf_tmp
