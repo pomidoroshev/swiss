@@ -108,7 +108,7 @@ nim
 zig
 EOF
 
-RUN --mount=type=cache,target=$HOME/.asdf/plugins,uid=$UID,gid=$GID --mount=type=cache,target=$HOME/.asdf/installs,uid=$UID,gid=$GID <<EOF
+RUN <<EOF
 while read plugin; do
     asdf plugin add $plugin
     asdf install $plugin latest &
