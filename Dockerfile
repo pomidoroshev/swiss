@@ -154,3 +154,81 @@ asdf plugin add dotnet-core
 asdf install dotnet-core latest
 asdf global dotnet-core latest
 EOF
+
+RUN <<EOF
+asdf plugin add crystal
+asdf install crystal latest
+asdf global crystal latest
+EOF
+
+RUN <<EOF
+asdf plugin add dart
+asdf install dart latest
+asdf global dart latest
+EOF
+
+RUN <<EOF
+asdf plugin add deno
+asdf install deno latest
+asdf global deno latest
+EOF
+
+RUN <<EOF
+asdf plugin add elm
+asdf install elm latest
+asdf global elm latest
+EOF
+
+RUN <<EOF
+asdf plugin add elixir
+asdf install elixir latest
+asdf global elixir latest
+EOF
+
+RUN <<EOF
+asdf plugin add haskell
+asdf install haskell latest
+asdf global haskell latest
+EOF
+
+RUN <<EOF
+asdf plugin add julia
+asdf install julia latest
+asdf global julia latest
+EOF
+
+RUN <<EOF
+asdf plugin add lua
+asdf install lua latest
+asdf global lua latest
+EOF
+
+RUN <<EOF
+asdf plugin add luajit
+asdf install luajit latest
+asdf global luajit latest
+EOF
+
+RUN <<EOF
+asdf plugin add ocaml
+asdf install ocaml latest
+asdf global ocaml latest
+EOF
+
+RUN <<EOF
+asdf plugin add r
+asdf install r latest
+asdf global r latest
+EOF
+
+RUN <<EOF
+asdf plugin add scala
+asdf install scala latest
+asdf global scala latest
+EOF
+
+RUN <<EOF
+asdf plugin add v
+asdf install v latest
+asdf global v latest
+EOF
