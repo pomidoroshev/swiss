@@ -132,7 +132,7 @@ done
 
 for ver in "${global_versions[@]}"
 do
-    asdf install $ver &
+    asdf install $ver
 done
 wait
 
