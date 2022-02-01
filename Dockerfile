@@ -203,10 +203,12 @@ asdf install lua latest
 asdf global lua latest
 EOF
 
+RUN apt-get install -y linux-headers-$(uname -r) build-essential
+
 RUN <<EOF
-asdf plugin add luajit
-asdf install luajit latest
-asdf global luajit latest
+asdf plugin add luaJIT
+asdf install luaJIT latest
+asdf global luaJIT latest
 EOF
 
 RUN <<EOF
@@ -216,9 +218,9 @@ asdf global ocaml latest
 EOF
 
 RUN <<EOF
-asdf plugin add r
-asdf install r latest
-asdf global r latest
+asdf plugin add R
+asdf install R latest
+asdf global R latest
 EOF
 
 RUN <<EOF
