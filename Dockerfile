@@ -69,26 +69,16 @@ apt-get upgrade -y
 apt-get install -y $(cat packages)
 EOF
 
-ARG UNAME=swiss
-ARG UID=1000
-ARG GID=1000
-RUN groupadd -g $GID $UNAME
-RUN useradd -m -u $UID -g $GID -s /bin/bash $UNAME && echo "swiss:swiss" | chpasswd && adduser $UNAME sudo
-
-WORKDIR /home/$UNAME
-USER $UNAME
-
-ENV HOME /home/$UNAME
-ENV PATH $PATH:$HOME/.asdf/shims:$HOME/.asdf/bin
+ENV ASDF_DIR "/asdf"
+ENV ASDF_DATA_DIR $ASDF_DIR
+ENV PATH $ASDF_DIR/shims:$ASDF_DIR/bin:$PATH
 
 RUN <<EOF
-git clone --depth 1 https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.9.0
-echo '. $HOME/.asdf/asdf.sh' >> $HOME/.bashrc
-echo '. $HOME/.asdf/asdf.sh' >> $HOME/.profile
-echo 'legacy_version_file = yes' >> $HOME/.asdfrc
+git clone --depth 1 https://github.com/asdf-vm/asdf.git $ASDF_DIR --branch v0.9.0
+echo 'legacy_version_file = yes' >> /root/.asdfrc
 EOF
 
-COPY <<EOF $HOME/.default-python-packages
+COPY <<EOF /root/.default-python-packages
 poetry
 ptipython
 requests
