@@ -90,142 +90,36 @@ mypy
 EOF
 
 ENV RUST_WITHOUT rust-docs,rust-other-component
+RUN P=golang V=latest asdf plugin add $P && asdf install $P $V && asdf global $P $V
+RUN P=python V=latest asdf plugin add $P && asdf install $P $V && asdf global $P $V
+RUN P=nodejs V=latest asdf plugin add $P && asdf install $P $V && asdf global $P $V
+RUN P=rust V=latest asdf plugin add $P && asdf install $P $V && asdf global $P $V
+RUN P=kotlin V=latest asdf plugin add $P && asdf install $P $V && asdf global $P $V
+RUN P=ruby V=latest asdf plugin add $P && asdf install $P $V && asdf global $P $V
+RUN P=nim V=latest asdf plugin add $P && asdf install $P $V && asdf global $P $V
+RUN P=zig V=latest asdf plugin add $P && asdf install $P $V && asdf global $P $V
+RUN P=php V=latest asdf plugin add $P && asdf install $P $V && asdf global $P $V
+RUN P=java V=openjdk-17.0.2 asdf plugin add $P && asdf install $P $V && asdf global $P $V
+RUN P=dotnet-core V=latest asdf plugin add $P && asdf install $P $V && asdf global $P $V
+RUN P=crystal V=latest asdf plugin add $P && asdf install $P $V && asdf global $P $V
+RUN P=dart V=latest asdf plugin add $P && asdf install $P $V && asdf global $P $V
+RUN P=deno V=latest asdf plugin add $P && asdf install $P $V && asdf global $P $V
+RUN P=elm V=latest asdf plugin add $P && asdf install $P $V && asdf global $P $V
+RUN P=elixir V=latest asdf plugin add $P && asdf install $P $V && asdf global $P $V
+RUN P=haskell V=latest asdf plugin add $P && asdf install $P $V && asdf global $P $V
+RUN P=julia V=latest asdf plugin add $P && asdf install $P $V && asdf global $P $V
+RUN P=lua V=latest asdf plugin add $P && asdf install $P $V && asdf global $P $V
+RUN P=luaJIT V=latest asdf plugin add $P && asdf install $P $V && asdf global $P $V
+RUN P=ocaml V=latest asdf plugin add $P && asdf install $P $V && asdf global $P $V
+RUN P=R V=latest asdf plugin add $P && asdf install $P $V && asdf global $P $V
+RUN P=scala V=latest asdf plugin add $P && asdf install $P $V && asdf global $P $V
 
-RUN <<EOF
-set -ex
-plugins=(
-    golang
-    python
-    nodejs
-    rust
-    kotlin
-    ruby
-    nim
-    zig
-    php
-    java
-)
+RUN P=golang V=1.18beta2 asdf plugin add $P && asdf install $P $V && asdf global $P $V
 
-global_versions=(
-    "php latest"
-    "ruby latest"
-    "python latest"
-    "golang latest"
-    "java openjdk-17.0.2"
-    "nodejs latest"
-    "rust latest"
-    "kotlin latest"
-    "nim latest"
-    "zig latest"
-)
+RUN P=python V=pypy3.8-7.3.7 asdf plugin add $P && asdf install $P $V
+RUN P=python V=3.7.12 asdf plugin add $P && asdf install $P $V
+RUN P=python V=3.8.12 asdf plugin add $P && asdf install $P $V
+RUN P=python V=3.9.10 asdf plugin add $P && asdf install $P $V
+RUN P=python V=3.11.0a4 asdf plugin add $P && asdf install $P $V
 
-extra_versions=(
-    "golang 1.18beta2"
-    "python pypy3.8-7.3.7"
-    "python 3.7.12"
-    "python 3.8.12"
-    "python 3.9.10"
-    "python 3.11.0a4"
-)
-
-for plugin in "${plugins[@]}"
-do
-    asdf plugin add $plugin
-done
-
-for ver in "${global_versions[@]}"
-do
-    asdf install $ver
-done
-wait
-
-for ver in "${global_versions[@]}"
-do
-    asdf global $ver
-done
-
-for ver in "${extra_versions[@]}"
-do
-    asdf install $ver
-done
-
-asdf reshim
-EOF
-
-RUN <<EOF
-asdf plugin add dotnet-core
-asdf install dotnet-core latest
-asdf global dotnet-core latest
-EOF
-
-RUN <<EOF
-asdf plugin add crystal
-asdf install crystal latest
-asdf global crystal latest
-EOF
-
-RUN <<EOF
-asdf plugin add dart
-asdf install dart latest
-asdf global dart latest
-EOF
-
-RUN <<EOF
-asdf plugin add deno
-asdf install deno latest
-asdf global deno latest
-EOF
-
-RUN <<EOF
-asdf plugin add elm
-asdf install elm latest
-asdf global elm latest
-EOF
-
-RUN <<EOF
-asdf plugin add elixir
-asdf install elixir latest
-asdf global elixir latest
-EOF
-
-RUN <<EOF
-asdf plugin add haskell
-asdf install haskell latest
-asdf global haskell latest
-EOF
-
-RUN <<EOF
-asdf plugin add julia
-asdf install julia latest
-asdf global julia latest
-EOF
-
-RUN <<EOF
-asdf plugin add lua
-asdf install lua latest
-asdf global lua latest
-EOF
-
-RUN <<EOF
-asdf plugin add luaJIT
-asdf install luaJIT latest
-asdf global luaJIT latest
-EOF
-
-RUN <<EOF
-asdf plugin add ocaml
-asdf install ocaml latest
-asdf global ocaml latest
-EOF
-
-RUN <<EOF
-asdf plugin add R
-asdf install R latest
-asdf global R latest
-EOF
-
-RUN <<EOF
-asdf plugin add scala
-asdf install scala latest
-asdf global scala latest
-EOF
+RUN asdf reshim
