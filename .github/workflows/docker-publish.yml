@@ -27,12 +27,6 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Cache Docker layers
-        uses: MasterworksIO/action-local-cache@1.0.0
-        with:
-          path: /tmp/.buildx-cache
-          key: docker-cache-v1
-
       - name: Build and push
         uses: docker/build-push-action@v2
         with:
@@ -40,9 +34,4 @@ jobs:
           push: true
           tags: ghcr.io/${{ github.repository_owner }}/swiss:latest
           cache-from: type=local,src=/tmp/.buildx-cache
-          cache-to: type=local,dest=/tmp/.buildx-cache-new
-
-      - name: Move cache
-        run: |
-          rm -rf /tmp/.buildx-cache
-          mv /tmp/.buildx-cache-new /tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache
