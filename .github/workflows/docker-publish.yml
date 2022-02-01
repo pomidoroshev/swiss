@@ -28,12 +28,10 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Cache Docker layers
-        uses: actions/cache@v2
+        uses: MasterworksIO/action-local-cache@1.0.0
         with:
           path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-buildx-2-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-buildx-2
+          key: docker-cache-v1
 
       - name: Build and push
         uses: docker/build-push-action@v2
