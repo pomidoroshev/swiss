@@ -60,6 +60,9 @@ libgd-dev
 libonig-dev
 libpq-dev
 libzip-dev
+gfortran
+xorg-dev
+libpcre2-dev
 EOF
 
 RUN rm -f /etc/apt/apt.conf.d/docker-clean; echo 'Binary::apt::APT::Keep-Downloaded-Packages "true";' > /etc/apt/apt.conf.d/keep-cache
@@ -203,8 +206,6 @@ asdf install lua latest
 asdf global lua latest
 EOF
 
-# RUN  apt-get install -y linux-headers-generic build-essential
-
 RUN <<EOF
 asdf plugin add luaJIT
 asdf install luaJIT latest
@@ -227,10 +228,4 @@ RUN <<EOF
 asdf plugin add scala
 asdf install scala latest
 asdf global scala latest
-EOF
-
-RUN <<EOF
-asdf plugin add v
-asdf install v latest
-asdf global v latest
 EOF
