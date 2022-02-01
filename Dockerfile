@@ -68,3 +68,5 @@ apt-get update
 apt-get upgrade -y
 apt-get install -y $(cat packages)
 EOF
+
+RUN echo 'a'
