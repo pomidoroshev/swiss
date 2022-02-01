@@ -203,7 +203,7 @@ asdf install lua latest
 asdf global lua latest
 EOF
 
-RUN apt-get install -y linux-headers-$(uname -r) build-essential
+RUN apt-get install -y linux-headers-generic build-essential
 
 RUN <<EOF
 asdf plugin add luaJIT
