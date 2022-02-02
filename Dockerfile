@@ -65,8 +65,7 @@ xorg-dev
 libpcre2-dev
 EOF
 
-RUN rm -f /etc/apt/apt.conf.d/docker-clean; echo 'Binary::apt::APT::Keep-Downloaded-Packages "true";' > /etc/apt/apt.conf.d/keep-cache
-RUN --mount=type=cache,target=/var/cache/apt --mount=type=cache,target=/var/lib/apt <<EOF
+RUN <<EOF
 apt-get update
 apt-get upgrade -y
 apt-get install -y $(cat packages)
