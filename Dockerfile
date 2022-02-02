@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1.3-labs
 
-FROM ubuntu:20.04
+FROM ubuntu:20.04 as base
 
 SHELL ["/bin/bash", "-c"]
 
@@ -75,12 +75,14 @@ EOF
 ENV ASDF_DIR "/asdf"
 ENV ASDF_DATA_DIR $ASDF_DIR
 ENV PATH $ASDF_DIR/shims:$ASDF_DIR/bin:$PATH
+ENV V latest
 
 RUN <<EOF
 git clone --depth 1 https://github.com/asdf-vm/asdf.git $ASDF_DIR --branch v0.9.0
 echo 'legacy_version_file = yes' >> /root/.asdfrc
 EOF
 
+FROM base as python
 COPY <<EOF /root/.default-python-packages
 poetry
 ptipython
@@ -89,37 +91,198 @@ pre-commit
 mypy
 EOF
 
+ENV P python
+RUN asdf plugin add $P && asdf install $P $V && asdf global $P $V
+RUN asdf install $P pypy3.8-7.3.7
+RUN asdf install $P 3.7.12
+RUN asdf install $P 3.8.12
+RUN asdf install $P 3.9.10
+RUN asdf install $P 3.11.0a4
+
+FROM base as golang
+ENV P golang
+RUN asdf plugin add $P && asdf install $P $V && asdf global $P $V
+RUN asdf install $P 1.18beta2
+
+FROM base as nodejs
+ENV P nodejs
+RUN asdf plugin add $P && asdf install $P $V && asdf global $P $V
+
+FROM base as rust
 ENV RUST_WITHOUT rust-docs,rust-other-component
-RUN P=golang V=latest asdf plugin add $P && asdf install $P $V && asdf global $P $V
-RUN P=python V=latest asdf plugin add $P && asdf install $P $V && asdf global $P $V
-RUN P=nodejs V=latest asdf plugin add $P && asdf install $P $V && asdf global $P $V
-RUN P=rust V=latest asdf plugin add $P && asdf install $P $V && asdf global $P $V
-RUN P=kotlin V=latest asdf plugin add $P && asdf install $P $V && asdf global $P $V
-RUN P=ruby V=latest asdf plugin add $P && asdf install $P $V && asdf global $P $V
-RUN P=nim V=latest asdf plugin add $P && asdf install $P $V && asdf global $P $V
-RUN P=zig V=latest asdf plugin add $P && asdf install $P $V && asdf global $P $V
-RUN P=php V=latest asdf plugin add $P && asdf install $P $V && asdf global $P $V
-RUN P=java V=openjdk-17.0.2 asdf plugin add $P && asdf install $P $V && asdf global $P $V
-RUN P=dotnet-core V=latest asdf plugin add $P && asdf install $P $V && asdf global $P $V
-RUN P=crystal V=latest asdf plugin add $P && asdf install $P $V && asdf global $P $V
-RUN P=dart V=latest asdf plugin add $P && asdf install $P $V && asdf global $P $V
-RUN P=deno V=latest asdf plugin add $P && asdf install $P $V && asdf global $P $V
-RUN P=elm V=latest asdf plugin add $P && asdf install $P $V && asdf global $P $V
-RUN P=elixir V=latest asdf plugin add $P && asdf install $P $V && asdf global $P $V
-RUN P=haskell V=latest asdf plugin add $P && asdf install $P $V && asdf global $P $V
-RUN P=julia V=latest asdf plugin add $P && asdf install $P $V && asdf global $P $V
-RUN P=lua V=latest asdf plugin add $P && asdf install $P $V && asdf global $P $V
-RUN P=luaJIT V=latest asdf plugin add $P && asdf install $P $V && asdf global $P $V
-RUN P=ocaml V=latest asdf plugin add $P && asdf install $P $V && asdf global $P $V
-RUN P=R V=latest asdf plugin add $P && asdf install $P $V && asdf global $P $V
-RUN P=scala V=latest asdf plugin add $P && asdf install $P $V && asdf global $P $V
+ENV P=rust
+RUN asdf plugin add $P && asdf install $P $V && asdf global $P $V
 
-RUN P=golang V=1.18beta2 asdf plugin add $P && asdf install $P $V && asdf global $P $V
+FROM base as kotlin
+ENV P kotlin
+RUN asdf plugin add $P && asdf install $P $V && asdf global $P $V
 
-RUN P=python V=pypy3.8-7.3.7 asdf plugin add $P && asdf install $P $V
-RUN P=python V=3.7.12 asdf plugin add $P && asdf install $P $V
-RUN P=python V=3.8.12 asdf plugin add $P && asdf install $P $V
-RUN P=python V=3.9.10 asdf plugin add $P && asdf install $P $V
-RUN P=python V=3.11.0a4 asdf plugin add $P && asdf install $P $V
+FROM base as ruby
+ENV P ruby
+RUN asdf plugin add $P && asdf install $P $V && asdf global $P $V
 
-RUN asdf reshim
+FROM base as nim
+ENV P nim
+RUN asdf plugin add $P && asdf install $P $V && asdf global $P $V
+
+FROM base as zig
+ENV P zig
+RUN asdf plugin add $P && asdf install $P $V && asdf global $P $V
+
+FROM base as php
+ENV P php
+RUN asdf plugin add $P && asdf install $P $V && asdf global $P $V
+
+FROM base as java
+ENV P java
+RUN asdf plugin add $P && asdf install $P openjdk-17.0.2 && asdf global $P openjdk-17.0.2
+
+# NB
+FROM java as scala
+ENV P scala
+RUN asdf plugin add $P && asdf install $P $V && asdf global $P $V
+
+FROM base as dotnet-core
+ENV P dotnet-core
+RUN asdf plugin add $P && asdf install $P $V && asdf global $P $V
+
+FROM base as crystal
+ENV P crystal
+RUN asdf plugin add $P && asdf install $P $V && asdf global $P $V
+
+FROM base as dart
+ENV P dart
+RUN asdf plugin add $P && asdf install $P $V && asdf global $P $V
+
+FROM base as deno
+ENV P deno
+RUN asdf plugin add $P && asdf install $P $V && asdf global $P $V
+
+FROM base as elm
+ENV P elm
+RUN asdf plugin add $P && asdf install $P $V && asdf global $P $V
+
+FROM base as elixir
+ENV P elixir
+RUN asdf plugin add $P && asdf install $P $V && asdf global $P $V
+
+FROM base as haskell
+ENV P haskell
+RUN asdf plugin add $P && asdf install $P $V && asdf global $P $V
+
+FROM base as julia
+ENV P julia
+RUN asdf plugin add $P && asdf install $P $V && asdf global $P $V
+
+FROM base as lua
+ENV P lua
+RUN asdf plugin add $P && asdf install $P $V && asdf global $P $V
+
+FROM base as luajit
+ENV P luaJIT
+RUN asdf plugin add $P && asdf install $P $V && asdf global $P $V
+
+FROM base as ocaml
+ENV P ocaml
+RUN asdf plugin add $P && asdf install $P $V && asdf global $P $V
+
+FROM base as r
+ENV P R
+RUN asdf plugin add $P && asdf install $P $V && asdf global $P $V
+
+FROM base as final
+COPY --from=golang $ASDF_DATA_DIR/plugins $ASDF_DATA_DIR/plugins
+COPY --from=golang $ASDF_DATA_DIR/installs $ASDF_DATA_DIR/installs
+COPY --from=golang $ASDF_DATA_DIR/.tool-versions /root/.tool-versions-golang
+
+COPY --from=nodejs $ASDF_DATA_DIR/plugins $ASDF_DATA_DIR/plugins
+COPY --from=nodejs $ASDF_DATA_DIR/installs $ASDF_DATA_DIR/installs
+COPY --from=nodejs $ASDF_DATA_DIR/.tool-versions /root/.tool-versions-nodejs
+
+COPY --from=python $ASDF_DATA_DIR/plugins $ASDF_DATA_DIR/plugins
+COPY --from=python $ASDF_DATA_DIR/installs $ASDF_DATA_DIR/installs
+COPY --from=python $ASDF_DATA_DIR/.tool-versions /root/.tool-versions-python
+
+COPY --from=rust $ASDF_DATA_DIR/plugins $ASDF_DATA_DIR/plugins
+COPY --from=rust $ASDF_DATA_DIR/installs $ASDF_DATA_DIR/installs
+COPY --from=rust $ASDF_DATA_DIR/.tool-versions /root/.tool-versions-rust
+
+COPY --from=kotlin $ASDF_DATA_DIR/plugins $ASDF_DATA_DIR/plugins
+COPY --from=kotlin $ASDF_DATA_DIR/installs $ASDF_DATA_DIR/installs
+COPY --from=kotlin $ASDF_DATA_DIR/.tool-versions /root/.tool-versions-kotlin
+
+COPY --from=ruby $ASDF_DATA_DIR/plugins $ASDF_DATA_DIR/plugins
+COPY --from=ruby $ASDF_DATA_DIR/installs $ASDF_DATA_DIR/installs
+COPY --from=ruby $ASDF_DATA_DIR/.tool-versions /root/.tool-versions-ruby
+
+COPY --from=nim $ASDF_DATA_DIR/plugins $ASDF_DATA_DIR/plugins
+COPY --from=nim $ASDF_DATA_DIR/installs $ASDF_DATA_DIR/installs
+COPY --from=nim $ASDF_DATA_DIR/.tool-versions /root/.tool-versions-nim
+
+COPY --from=zig $ASDF_DATA_DIR/plugins $ASDF_DATA_DIR/plugins
+COPY --from=zig $ASDF_DATA_DIR/installs $ASDF_DATA_DIR/installs
+COPY --from=zig $ASDF_DATA_DIR/.tool-versions /root/.tool-versions-zig
+
+COPY --from=php $ASDF_DATA_DIR/plugins $ASDF_DATA_DIR/plugins
+COPY --from=php $ASDF_DATA_DIR/installs $ASDF_DATA_DIR/installs
+COPY --from=php $ASDF_DATA_DIR/.tool-versions /root/.tool-versions-php
+
+COPY --from=java $ASDF_DATA_DIR/plugins $ASDF_DATA_DIR/plugins
+COPY --from=java $ASDF_DATA_DIR/installs $ASDF_DATA_DIR/installs
+COPY --from=java $ASDF_DATA_DIR/.tool-versions /root/.tool-versions-java
+
+COPY --from=dotnet-core $ASDF_DATA_DIR/plugins $ASDF_DATA_DIR/plugins
+COPY --from=dotnet-core $ASDF_DATA_DIR/installs $ASDF_DATA_DIR/installs
+COPY --from=dotnet-core $ASDF_DATA_DIR/.tool-versions /root/.tool-versions-dotnet-core
+
+COPY --from=crystal $ASDF_DATA_DIR/plugins $ASDF_DATA_DIR/plugins
+COPY --from=crystal $ASDF_DATA_DIR/installs $ASDF_DATA_DIR/installs
+COPY --from=crystal $ASDF_DATA_DIR/.tool-versions /root/.tool-versions-crystal
+
+COPY --from=dart $ASDF_DATA_DIR/plugins $ASDF_DATA_DIR/plugins
+COPY --from=dart $ASDF_DATA_DIR/installs $ASDF_DATA_DIR/installs
+COPY --from=dart $ASDF_DATA_DIR/.tool-versions /root/.tool-versions-dart
+
+COPY --from=deno $ASDF_DATA_DIR/plugins $ASDF_DATA_DIR/plugins
+COPY --from=deno $ASDF_DATA_DIR/installs $ASDF_DATA_DIR/installs
+COPY --from=deno $ASDF_DATA_DIR/.tool-versions /root/.tool-versions-deno
+
+COPY --from=elm $ASDF_DATA_DIR/plugins $ASDF_DATA_DIR/plugins
+COPY --from=elm $ASDF_DATA_DIR/installs $ASDF_DATA_DIR/installs
+COPY --from=elm $ASDF_DATA_DIR/.tool-versions /root/.tool-versions-elm
+
+COPY --from=elixir $ASDF_DATA_DIR/plugins $ASDF_DATA_DIR/plugins
+COPY --from=elixir $ASDF_DATA_DIR/installs $ASDF_DATA_DIR/installs
+COPY --from=elixir $ASDF_DATA_DIR/.tool-versions /root/.tool-versions-elixir
+
+COPY --from=haskell $ASDF_DATA_DIR/plugins $ASDF_DATA_DIR/plugins
+COPY --from=haskell $ASDF_DATA_DIR/installs $ASDF_DATA_DIR/installs
+COPY --from=haskell $ASDF_DATA_DIR/.tool-versions /root/.tool-versions-haskell
+
+COPY --from=julia $ASDF_DATA_DIR/plugins $ASDF_DATA_DIR/plugins
+COPY --from=julia $ASDF_DATA_DIR/installs $ASDF_DATA_DIR/installs
+COPY --from=julia $ASDF_DATA_DIR/.tool-versions /root/.tool-versions-julia
+
+COPY --from=lua $ASDF_DATA_DIR/plugins $ASDF_DATA_DIR/plugins
+COPY --from=lua $ASDF_DATA_DIR/installs $ASDF_DATA_DIR/installs
+COPY --from=lua $ASDF_DATA_DIR/.tool-versions /root/.tool-versions-lua
+
+COPY --from=luajit $ASDF_DATA_DIR/plugins $ASDF_DATA_DIR/plugins
+COPY --from=luajit $ASDF_DATA_DIR/installs $ASDF_DATA_DIR/installs
+COPY --from=luajit $ASDF_DATA_DIR/.tool-versions /root/.tool-versions-luajit
+
+COPY --from=ocaml $ASDF_DATA_DIR/plugins $ASDF_DATA_DIR/plugins
+COPY --from=ocaml $ASDF_DATA_DIR/installs $ASDF_DATA_DIR/installs
+COPY --from=ocaml $ASDF_DATA_DIR/.tool-versions /root/.tool-versions-ocaml
+
+COPY --from=r $ASDF_DATA_DIR/plugins $ASDF_DATA_DIR/plugins
+COPY --from=r $ASDF_DATA_DIR/installs $ASDF_DATA_DIR/installs
+COPY --from=r $ASDF_DATA_DIR/.tool-versions /root/.tool-versions-r
+
+COPY --from=scala $ASDF_DATA_DIR/plugins $ASDF_DATA_DIR/plugins
+COPY --from=scala $ASDF_DATA_DIR/installs $ASDF_DATA_DIR/installs
+COPY --from=scala $ASDF_DATA_DIR/.tool-versions /root/.tool-versions-scala
+
+RUN cat /root/.tool-versions-* > /root/.tool-versions \
+    && rm -f /root/.tool-versions-* \
+    && asdf reshim
