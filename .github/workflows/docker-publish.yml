@@ -20,6 +20,9 @@ jobs:
         uses: docker/setup-buildx-action@v1
         with:
           install: true
+          config-inline: |
+            [worker.oci]
+              max-parallelism = 2
 
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v1
@@ -32,7 +35,6 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: .
+          pull: true
           push: true
           tags: ghcr.io/${{ github.repository_owner }}/swiss:latest
-          cache-from: type=local,src=/tmp/.buildx-cache
-          cache-to: type=local,dest=/tmp/.buildx-cache
