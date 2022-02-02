@@ -31,10 +31,12 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Pull previous image version
+        run: docker pull ghcr.io/${{ github.repository_owner }}/swiss:latest || true
+
       - name: Build and push
         uses: docker/build-push-action@v2
         with:
           context: .
-          pull: true
           push: true
           tags: ghcr.io/${{ github.repository_owner }}/swiss:latest
