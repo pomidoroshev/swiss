@@ -193,95 +193,95 @@ RUN asdf plugin add $P && asdf install $P $V && asdf global $P $V
 FROM base as final
 COPY --from=golang $ASDF_DATA_DIR/plugins $ASDF_DATA_DIR/plugins
 COPY --from=golang $ASDF_DATA_DIR/installs $ASDF_DATA_DIR/installs
-COPY --from=golang $ASDF_DATA_DIR/.tool-versions /root/.tool-versions-golang
+COPY --from=golang /root/.tool-versions /root/.tool-versions-golang
 
 COPY --from=nodejs $ASDF_DATA_DIR/plugins $ASDF_DATA_DIR/plugins
 COPY --from=nodejs $ASDF_DATA_DIR/installs $ASDF_DATA_DIR/installs
-COPY --from=nodejs $ASDF_DATA_DIR/.tool-versions /root/.tool-versions-nodejs
+COPY --from=nodejs /root/.tool-versions /root/.tool-versions-nodejs
 
 COPY --from=python $ASDF_DATA_DIR/plugins $ASDF_DATA_DIR/plugins
 COPY --from=python $ASDF_DATA_DIR/installs $ASDF_DATA_DIR/installs
-COPY --from=python $ASDF_DATA_DIR/.tool-versions /root/.tool-versions-python
+COPY --from=python /root/.tool-versions /root/.tool-versions-python
 
 COPY --from=rust $ASDF_DATA_DIR/plugins $ASDF_DATA_DIR/plugins
 COPY --from=rust $ASDF_DATA_DIR/installs $ASDF_DATA_DIR/installs
-COPY --from=rust $ASDF_DATA_DIR/.tool-versions /root/.tool-versions-rust
+COPY --from=rust /root/.tool-versions /root/.tool-versions-rust
 
 COPY --from=kotlin $ASDF_DATA_DIR/plugins $ASDF_DATA_DIR/plugins
 COPY --from=kotlin $ASDF_DATA_DIR/installs $ASDF_DATA_DIR/installs
-COPY --from=kotlin $ASDF_DATA_DIR/.tool-versions /root/.tool-versions-kotlin
+COPY --from=kotlin /root/.tool-versions /root/.tool-versions-kotlin
 
 COPY --from=ruby $ASDF_DATA_DIR/plugins $ASDF_DATA_DIR/plugins
 COPY --from=ruby $ASDF_DATA_DIR/installs $ASDF_DATA_DIR/installs
-COPY --from=ruby $ASDF_DATA_DIR/.tool-versions /root/.tool-versions-ruby
+COPY --from=ruby /root/.tool-versions /root/.tool-versions-ruby
 
 COPY --from=nim $ASDF_DATA_DIR/plugins $ASDF_DATA_DIR/plugins
 COPY --from=nim $ASDF_DATA_DIR/installs $ASDF_DATA_DIR/installs
-COPY --from=nim $ASDF_DATA_DIR/.tool-versions /root/.tool-versions-nim
+COPY --from=nim /root/.tool-versions /root/.tool-versions-nim
 
 COPY --from=zig $ASDF_DATA_DIR/plugins $ASDF_DATA_DIR/plugins
 COPY --from=zig $ASDF_DATA_DIR/installs $ASDF_DATA_DIR/installs
-COPY --from=zig $ASDF_DATA_DIR/.tool-versions /root/.tool-versions-zig
+COPY --from=zig /root/.tool-versions /root/.tool-versions-zig
 
 COPY --from=php $ASDF_DATA_DIR/plugins $ASDF_DATA_DIR/plugins
 COPY --from=php $ASDF_DATA_DIR/installs $ASDF_DATA_DIR/installs
-COPY --from=php $ASDF_DATA_DIR/.tool-versions /root/.tool-versions-php
+COPY --from=php /root/.tool-versions /root/.tool-versions-php
 
 COPY --from=java $ASDF_DATA_DIR/plugins $ASDF_DATA_DIR/plugins
 COPY --from=java $ASDF_DATA_DIR/installs $ASDF_DATA_DIR/installs
-COPY --from=java $ASDF_DATA_DIR/.tool-versions /root/.tool-versions-java
+COPY --from=java /root/.tool-versions /root/.tool-versions-java
 
 COPY --from=dotnet-core $ASDF_DATA_DIR/plugins $ASDF_DATA_DIR/plugins
 COPY --from=dotnet-core $ASDF_DATA_DIR/installs $ASDF_DATA_DIR/installs
-COPY --from=dotnet-core $ASDF_DATA_DIR/.tool-versions /root/.tool-versions-dotnet-core
+COPY --from=dotnet-core /root/.tool-versions /root/.tool-versions-dotnet-core
 
 COPY --from=crystal $ASDF_DATA_DIR/plugins $ASDF_DATA_DIR/plugins
 COPY --from=crystal $ASDF_DATA_DIR/installs $ASDF_DATA_DIR/installs
-COPY --from=crystal $ASDF_DATA_DIR/.tool-versions /root/.tool-versions-crystal
+COPY --from=crystal /root/.tool-versions /root/.tool-versions-crystal
 
 COPY --from=dart $ASDF_DATA_DIR/plugins $ASDF_DATA_DIR/plugins
 COPY --from=dart $ASDF_DATA_DIR/installs $ASDF_DATA_DIR/installs
-COPY --from=dart $ASDF_DATA_DIR/.tool-versions /root/.tool-versions-dart
+COPY --from=dart /root/.tool-versions /root/.tool-versions-dart
 
 COPY --from=deno $ASDF_DATA_DIR/plugins $ASDF_DATA_DIR/plugins
 COPY --from=deno $ASDF_DATA_DIR/installs $ASDF_DATA_DIR/installs
-COPY --from=deno $ASDF_DATA_DIR/.tool-versions /root/.tool-versions-deno
+COPY --from=deno /root/.tool-versions /root/.tool-versions-deno
 
 COPY --from=elm $ASDF_DATA_DIR/plugins $ASDF_DATA_DIR/plugins
 COPY --from=elm $ASDF_DATA_DIR/installs $ASDF_DATA_DIR/installs
-COPY --from=elm $ASDF_DATA_DIR/.tool-versions /root/.tool-versions-elm
+COPY --from=elm /root/.tool-versions /root/.tool-versions-elm
 
 COPY --from=elixir $ASDF_DATA_DIR/plugins $ASDF_DATA_DIR/plugins
 COPY --from=elixir $ASDF_DATA_DIR/installs $ASDF_DATA_DIR/installs
-COPY --from=elixir $ASDF_DATA_DIR/.tool-versions /root/.tool-versions-elixir
+COPY --from=elixir /root/.tool-versions /root/.tool-versions-elixir
 
 COPY --from=haskell $ASDF_DATA_DIR/plugins $ASDF_DATA_DIR/plugins
 COPY --from=haskell $ASDF_DATA_DIR/installs $ASDF_DATA_DIR/installs
-COPY --from=haskell $ASDF_DATA_DIR/.tool-versions /root/.tool-versions-haskell
+COPY --from=haskell /root/.tool-versions /root/.tool-versions-haskell
 
 COPY --from=julia $ASDF_DATA_DIR/plugins $ASDF_DATA_DIR/plugins
 COPY --from=julia $ASDF_DATA_DIR/installs $ASDF_DATA_DIR/installs
-COPY --from=julia $ASDF_DATA_DIR/.tool-versions /root/.tool-versions-julia
+COPY --from=julia /root/.tool-versions /root/.tool-versions-julia
 
 COPY --from=lua $ASDF_DATA_DIR/plugins $ASDF_DATA_DIR/plugins
 COPY --from=lua $ASDF_DATA_DIR/installs $ASDF_DATA_DIR/installs
-COPY --from=lua $ASDF_DATA_DIR/.tool-versions /root/.tool-versions-lua
+COPY --from=lua /root/.tool-versions /root/.tool-versions-lua
 
 COPY --from=luajit $ASDF_DATA_DIR/plugins $ASDF_DATA_DIR/plugins
 COPY --from=luajit $ASDF_DATA_DIR/installs $ASDF_DATA_DIR/installs
-COPY --from=luajit $ASDF_DATA_DIR/.tool-versions /root/.tool-versions-luajit
+COPY --from=luajit /root/.tool-versions /root/.tool-versions-luajit
 
 COPY --from=ocaml $ASDF_DATA_DIR/plugins $ASDF_DATA_DIR/plugins
 COPY --from=ocaml $ASDF_DATA_DIR/installs $ASDF_DATA_DIR/installs
-COPY --from=ocaml $ASDF_DATA_DIR/.tool-versions /root/.tool-versions-ocaml
+COPY --from=ocaml /root/.tool-versions /root/.tool-versions-ocaml
 
 COPY --from=r $ASDF_DATA_DIR/plugins $ASDF_DATA_DIR/plugins
 COPY --from=r $ASDF_DATA_DIR/installs $ASDF_DATA_DIR/installs
-COPY --from=r $ASDF_DATA_DIR/.tool-versions /root/.tool-versions-r
+COPY --from=r /root/.tool-versions /root/.tool-versions-r
 
 COPY --from=scala $ASDF_DATA_DIR/plugins $ASDF_DATA_DIR/plugins
 COPY --from=scala $ASDF_DATA_DIR/installs $ASDF_DATA_DIR/installs
-COPY --from=scala $ASDF_DATA_DIR/.tool-versions /root/.tool-versions-scala
+COPY --from=scala /root/.tool-versions /root/.tool-versions-scala
 
 RUN cat /root/.tool-versions-* > /root/.tool-versions \
     && rm -f /root/.tool-versions-* \
